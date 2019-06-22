@@ -1,0 +1,19 @@
+{
+  "name": "ozy",
+  "version": "1.0.0",
+  "description": "A character sheet wrangler",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ReverieWisp/Ozy.git"
+  },
+  "author": "reverie wisp",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ReverieWisp/Ozy/issues"
+  },
+  "homepage": "https://github.com/ReverieWisp/Ozy#readme"
+}
