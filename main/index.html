@@ -97,83 +97,119 @@
 		</tr>
 	</table>
 	<hr/>
-
+	<table>
+		<tr>
+			<th>Equiptment</th>
+			<th>Score</th>
+			<th>Modifier</th>
+		</tr>
+		<tr>
+			<td><strong>[STR] (strength)</strong></td>
+			<td><span id="str">0</span></td>
+			<td><span id="str-mod">0</span></td>
+		</tr>
+	</table>
 </body>
 
 <script type="text/javascript">
-	let name = "-";
-	let alignment = "-";
-	let level = -1;
-	let diety = "-";
-	let homeland = "-";
-	let race = "-";
-	let size = "-";
-	let gender = "-";
-	let age = 0;      // In years
-	let height = 0;   // In inches
-	let weight = 0;   // in lbs
-	let hair = "-";
-	let eyes = "-";
+	p = {};
+	
+	p.name = "-";
+	p.alignment = "-";
+	p.level = -1;
+	p.diety = "-";
+	p.homeland = "-";
+	p.race = "-";
+	p.size = "-";
+	p.gender = "-";
+	p.age = -1;      // In years
+	p.height = -1;   // In inches
+	p.weight = -1;   // in pounds
+	p.hair = "-";
+	p.eyes = "-";
 
-	let str = -1;
-	let dex = -1;
-	let con = -1;
-	let int = -1;
-	let wis = -1;
-	let cha = -1;
+	p.str = -1;
+	p.dex = -1;
+	p.con = -1;
+	p.int = -1;
+	p.wis = -1;
+	p.cha = -1;
+
+	p.speed = -1;
+	p.hp = -1;
+
+	p.equipment = [];
+	p.weapons = [];
 
 	function getId(id) {
 		return document.getElementById(id);
 	}
 
 	function readGeneral() {
-		name = "Ozymandias";
-		alignment = "True Neutral";
-		level = 13;
-		diety = "None";
-		homeland = "Menachterun, Xen-drik";
-		race = "Tiefling";
-		size = "M";
-		gender = "M";
-		age = "Unknown";
-		height = "68";
-		weight = "170"; // tail adds weight
-		hair = "Messy brown with horns"
-		eyes = "Grey";
+		p.name = "Ozymandias";
+		p.alignment = "True Neutral";
+		p.level = 13;
+		p.diety = "None";
+		p.homeland = "Menachterun, Xen-drik";
+		p.race = "Tiefling";
+		p.size = "M";
+		p.gender = "M";
+		p.age = "Unknown";
+		p.height = "68";
+		p.weight = "220"; // tail adds weight
+		p.hair = "Messy brown with horns"
+		p.eyes = "Grey";
 	}
 
 	function readAbilites() {
-		str = 9;
-		dex = 16;
-		con = 12;
-		int = 12;
-		wis = 10
-		cha = 26;
+		p.str = 9;
+		p.dex = 16;
+		p.con = 12;
+		p.int = 12;
+		p.wis = 10
+		p.cha = 26;
 	} 
 
+	function readWeapons() {
+		p.weapons = [
+			{name:"Ghostly Scimitar", modifier:"+2", effects:"ghost touch", notes:"bab+dex+1, critical 18-20 (2x)", damage:"1d6+"},
+		];
+	}
+
+	function readEquipment() {
+		p.equipment = [
+			{name:"Chainshirt", stats:"ac_+5 stealth_-1", type:"shirt", weight:"20", equipped:true},
+			{name:"Ring of Protection", stats:"ac_+1", type:"ring", weight:"0", equipped:true},
+			{name:"Boots of Stridening", stats:"speed_+10", type:"boots", weight:"1", equipped:true},
+			{name:"Stealth Cloak", stats:"stealth_+1", type:"cloak", weight:"3", equipped:true},
+			{name:"Stylish Headband", stats:"cha_+2", type:"shirt", weight:"0", equipped:true},
+			{name:"Amulet of Natural Armor", stats:"ac_+1", type:"amulet", weight:"0", equipped:true},
+		];
+	}
+
 	function showGeneral() {
-		getId('name').innerHTML = name;
-		getId('alignment').innerHTML = alignment;
-		getId('level').innerHTML = level;
-		getId('diety').innerHTML = diety;
-		getId('homeland').innerHTML = homeland;
-		getId('race').innerHTML = race;
-		getId('size').innerHTML = size;
-		getId('gender').innerHTML = gender;
-		getId('age').innerHTML = age;
-		getId('height').innerHTML = height;
-		getId('weight').innerHTML = weight;
-		getId('hair').innerHTML = hair;
-		getId('eyes').innerHTML = eyes;
+		getId('name').innerHTML = p.name;
+		getId('alignment').innerHTML = p.alignment;
+		getId('level').innerHTML = p.level;
+		getId('diety').innerHTML = p.diety;
+		getId('homeland').innerHTML = p.homeland;
+		getId('race').innerHTML = p.race;
+		getId('size').innerHTML = p.size;
+		getId('gender').innerHTML = p.gender;
+		getId('age').innerHTML = p.age;
+		getId('height').innerHTML = p.height;
+		getId('weight').innerHTML = p.weight;
+		getId('hair').innerHTML = p.hair;
+		getId('eyes').innerHTML = p.eyes;
 	}
 
 	function showAbilities() {
-		getId('str').innerHTML = str;
-		getId('dex').innerHTML = dex;
-		getId('con').innerHTML = con;
-		getId('int').innerHTML = int;
-		getId('wis').innerHTML = wis;
-		getId('cha').innerHTML = cha;
+		getId('str').innerHTML = p.str;
+		getId('dex').innerHTML = p.dex;
+		getId('con').innerHTML = p.con;
+		getId('int').innerHTML = p.int;
+		getId('wis').innerHTML = p.wis;
+		getId('cha').innerHTML = p.cha;
 	}
 
 	function calculateAbilityModifiers() {
@@ -181,22 +217,40 @@
 			return Math.floor((a - 10) / 2);
 		}
 
-		getId('str-mod').innerHTML = calc_am(str);
-		getId('dex-mod').innerHTML = calc_am(dex);
-		getId('con-mod').innerHTML = calc_am(con);
-		getId('int-mod').innerHTML = calc_am(int);
-		getId('wis-mod').innerHTML = calc_am(wis);
-		getId('cha-mod').innerHTML = calc_am(cha);
+		getId('str-mod').innerHTML = calc_am(p.str);
+		getId('dex-mod').innerHTML = calc_am(p.dex);
+		getId('con-mod').innerHTML = calc_am(p.con);
+		getId('int-mod').innerHTML = calc_am(p.int);
+		getId('wis-mod').innerHTML = calc_am(p.wis);
+		getId('cha-mod').innerHTML = calc_am(p.cha);
+	}
+
+	// Split on spaces and then on underscores. Note that stats are in the format (stat1_+2 stat2_-50)
+	function calculateEquipmentModifiers() {
+		for (let i = 0; i < p.equipment.length; i++) { 
+  			let item = p.equipment[i];
+  			let stats = item.stats.split(' ') 
+  			
+  			for(let j = 0; j < stats.lenght; j++) {
+  				let split = stats.split('_');
+  				let stat = split[0];
+  				let change = split[1];
+  				
+  			}
+		}
 	}
 
 	function refreshAll() {
 		readGeneral();
 		readAbilites();
+		readWeapons();
+		readEquipment();
 
 		showGeneral();
 		showAbilities();
 		
 		calculateAbilityModifiers();
+		calculateEquipmentModifiers();
 	}
 
 	refreshAll();
