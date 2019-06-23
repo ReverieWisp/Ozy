@@ -4,13 +4,201 @@
 	<title>Ozy</title>
 </head>
 <body>
-
-	<p><strong>[STR] (strength) - </strong><span id="str">9</span></p>
-	<p><strong>[DEX] (dexterity) - </strong><span id="dex">16</span></p>
-	<p><strong>[CON] (constitution) - </strong><span id="con">12</span></p>
-	<p><strong>[INT] (intelligence) - </strong><span id="int">12</span></p>
-	<p><strong>[WIS] (wisdom) - </strong><span id="wis">10</span></p>
-	<p><strong>[CHA] (charisma) - </strong><span id="cha">26</span></p>
+	<table>
+		<tr>
+			<td><strong>Name</strong></td>
+			<td><span id="name"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Alignment</strong></td>
+			<td><span id="alignment"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Level</strong></td>
+			<td><span id="level"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Diety</strong></td>
+			<td><span id="diety"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Homeland</strong></td>
+			<td><span id="homeland"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Race</strong></td>
+			<td><span id="race"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Size</strong></td>
+			<td><span id="size"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Gender</strong></td>
+			<td><span id="gender"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Age</strong></td>
+			<td><span id="age"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Height</strong></td>
+			<td><span id="height"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Weight</strong></td>
+			<td><span id="weight"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Hair</strong></td>
+			<td><span id="hair"></span></td>
+		</tr>
+		<tr>
+			<td><strong>Eyes</strong></td>
+			<td><span id="eyes"></span></td>
+		</tr>
+	</table>
 	<hr/>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Score</th>
+			<th>Modifier</th>
+		</tr>
+		<tr>
+			<td><strong>[STR] (strength)</strong></td>
+			<td><span id="str">0</span></td>
+			<td><span id="str-mod">0</span></td>
+		</tr>
+		<tr>
+			<td><strong>[DEX] (dexterity)</strong></td>
+			<td><span id="dex">0</span></td>
+			<td><span id="dex-mod">0</span></td>
+		</tr>
+		<tr>
+			<td><strong>[CON] (constitution)</strong></td>
+			<td><span id="con">0</span></td>
+			<td><span id="con-mod">0</span></td>
+		</tr>
+		<tr>
+			<td><strong>[INT] (intelligence)</strong></td>
+			<td><span id="int">0</span></td>
+			<td><span id="int-mod">0</span></td>
+		</tr>
+		<tr>
+			<td><strong>[WIS] (wisdom)</strong></td>
+			<td><span id="wis">0</span></td>
+			<td><span id="wis-mod">0</span></td>
+		</tr>
+		<tr>
+			<td><strong>[CHA] (charisma)</strong></td>
+			<td><span id="cha">0</span></td>
+			<td><span id="cha-mod">0</span></td>
+		</tr>
+	</table>
+	<hr/>
+
 </body>
+
+<script type="text/javascript">
+	let name = "-";
+	let alignment = "-";
+	let level = -1;
+	let diety = "-";
+	let homeland = "-";
+	let race = "-";
+	let size = "-";
+	let gender = "-";
+	let age = 0;      // In years
+	let height = 0;   // In inches
+	let weight = 0;   // in lbs
+	let hair = "-";
+	let eyes = "-";
+
+	let str = -1;
+	let dex = -1;
+	let con = -1;
+	let int = -1;
+	let wis = -1;
+	let cha = -1;
+
+	function getId(id) {
+		return document.getElementById(id);
+	}
+
+	function readGeneral() {
+		name = "Ozymandias";
+		alignment = "True Neutral";
+		level = 13;
+		diety = "None";
+		homeland = "Menachterun, Xen-drik";
+		race = "Tiefling";
+		size = "M";
+		gender = "M";
+		age = "Unknown";
+		height = "68";
+		weight = "170"; // tail adds weight
+		hair = "Messy brown with horns"
+		eyes = "Grey";
+	}
+
+	function readAbilites() {
+		str = 9;
+		dex = 16;
+		con = 12;
+		int = 12;
+		wis = 10
+		cha = 26;
+	} 
+
+	function showGeneral() {
+		getId('name').innerHTML = name;
+		getId('alignment').innerHTML = alignment;
+		getId('level').innerHTML = level;
+		getId('diety').innerHTML = diety;
+		getId('homeland').innerHTML = homeland;
+		getId('race').innerHTML = race;
+		getId('size').innerHTML = size;
+		getId('gender').innerHTML = gender;
+		getId('age').innerHTML = age;
+		getId('height').innerHTML = height;
+		getId('weight').innerHTML = weight;
+		getId('hair').innerHTML = hair;
+		getId('eyes').innerHTML = eyes;
+	}
+
+	function showAbilities() {
+		getId('str').innerHTML = str;
+		getId('dex').innerHTML = dex;
+		getId('con').innerHTML = con;
+		getId('int').innerHTML = int;
+		getId('wis').innerHTML = wis;
+		getId('cha').innerHTML = cha;
+	}
+
+	function calculateAbilityModifiers() {
+		function calc_am(a) {
+			return Math.floor((a - 10) / 2);
+		}
+
+		getId('str-mod').innerHTML = calc_am(str);
+		getId('dex-mod').innerHTML = calc_am(dex);
+		getId('con-mod').innerHTML = calc_am(con);
+		getId('int-mod').innerHTML = calc_am(int);
+		getId('wis-mod').innerHTML = calc_am(wis);
+		getId('cha-mod').innerHTML = calc_am(cha);
+	}
+
+	function refreshAll() {
+		readGeneral();
+		readAbilites();
+
+		showGeneral();
+		showAbilities();
+		
+		calculateAbilityModifiers();
+	}
+
+	refreshAll();
+</script>
 </html>
