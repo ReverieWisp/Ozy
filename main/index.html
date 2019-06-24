@@ -97,18 +97,7 @@
 		</tr>
 	</table>
 	<hr/>
-	<table>
-		<tr>
-			<th>Equiptment</th>
-			<th>Score</th>
-			<th>Modifier</th>
-		</tr>
-		<tr>
-			<td><strong>[STR] (strength)</strong></td>
-			<td><span id="str">0</span></td>
-			<td><span id="str-mod">0</span></td>
-		</tr>
-	</table>
+	<span id="table-equipment"></span>
 </body>
 
 <script type="text/javascript">
@@ -212,6 +201,34 @@
 		getId('cha').innerHTML = p.cha;
 	}
 
+	function showEquipment() {
+		let built = "";
+		built += '<table>';
+		built += `
+			<tr>
+				<th>Name</th>
+				<th>Stats</th>
+				<th>Type</th>
+				<th>Weight</th>
+				<th>Equipped</th>
+			</tr>`;
+
+		for(let i = 0; i < p.equipment.length; i++) {
+			let item = p.equipment[i];
+
+			built += `
+				<tr>
+					<td>${item.name}</td>
+					<td>${item.stats.split(' ').join(', ').split('_').join(' ')}</td>
+					<td>${item.type}</td>
+					<td>${item.weight}</td>
+					<td>${item.equipped}</td>
+				</tr>`;
+		}
+		built += '</table>';
+		getId('table-equipment').innerHTML = built;
+	}
+
 	function calculateAbilityModifiers() {
 		function calc_am(a) {
 			return Math.floor((a - 10) / 2);
@@ -227,15 +244,17 @@
 
 	// Split on spaces and then on underscores. Note that stats are in the format (stat1_+2 stat2_-50)
 	function calculateEquipmentModifiers() {
+
 		for (let i = 0; i < p.equipment.length; i++) { 
   			let item = p.equipment[i];
-  			let stats = item.stats.split(' ') 
-  			
-  			for(let j = 0; j < stats.lenght; j++) {
-  				let split = stats.split('_');
+  			let stats = item.stats.split(' ');
+
+  			for(let j = 0; j < stats.length; j++) {
+  				let split = stats[j].split('_');
   				let stat = split[0];
-  				let change = split[1];
-  				
+  				let change = parseInt(split[1]);
+				
+  				p[stat] = p[stat] + change;
   			}
 		}
 	}
@@ -246,11 +265,12 @@
 		readWeapons();
 		readEquipment();
 
+		calculateEquipmentModifiers();
+		calculateAbilityModifiers();
+
 		showGeneral();
 		showAbilities();
-		
-		calculateAbilityModifiers();
-		calculateEquipmentModifiers();
+		showEquipment();
 	}
 
 	refreshAll();

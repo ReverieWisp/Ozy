@@ -4,22 +4,28 @@
   "description": "A character sheet wrangler",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ReverieWisp/Ozy.git"
+    "url": "git+https://github.com/ReverieWisp/Ozymandias.git"
   },
   "author": "reverie wisp",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ReverieWisp/Ozy/issues"
+    "url": "https://github.com/ReverieWisp/Ozymandias/issues"
   },
-  "homepage": "https://github.com/ReverieWisp/Ozy#readme",
-  "dependencies": {
-    "electron": "^5.0.5"
+  "homepage": "https://github.com/ReverieWisp/Ozymandias#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^5.0.2",
+    "electron-builder": "^20.41.0"
+  },
+  "build": {
+    "appId": "your.id",
+    "mac": {
+      "category": "app.derg.ozymandias"
+    }
   }
 }
