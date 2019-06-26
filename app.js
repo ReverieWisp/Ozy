@@ -7,12 +7,12 @@ function createWindow () {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800,
-    height: 600
+    height: 600,
+    icon: __dirname + '/icon.ico'
   })
 
-  // and load the index.html of the app.
+  // And load the index.html of the app.
   mainWindow.loadFile('main/index.html');
-  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
