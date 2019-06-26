@@ -30,7 +30,10 @@
 
 
 <body>
+	<h1>Character Sheet</h1>
+	<hr/>
 	<table>
+		<h2>General</h2>
 		<tr>
 			<th>Fields</th>
 			<th>Info</th>
@@ -90,6 +93,7 @@
 	</table>
 	<hr/>
 	<table>
+		<h2>Abilities</h2>
 		<tr>
 			<th>Name</th>
 			<th>Score</th>
@@ -128,6 +132,25 @@
 	</table>
 	<hr/>
 	<table>
+		<h2>Initiative</h2>
+		<tr>
+			<th>Total</th>
+			<th>Dex Mod</th>
+			<th>Misc</th>
+		</tr>
+		<tr>
+			<td><span id="initiative">0</span></td>
+			<td><span id="initiative-mod">0</span></td>
+			<td><span id="initiative-misc">0</span></td>
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<h2>Armor Class</h2>
+	</table>
+	<hr/>
+	<table>
+		<h2>Saves</h2>
 		<tr>
 			<th>Save</th>
 			<th>Total</th>
@@ -155,6 +178,11 @@
 	</table>
 	<hr/>
 	<table>
+		<h2>Combat</h2>
+	</table>
+	<hr/>
+	<table>
+		<h2>Health</h2>
 		<tr>
 			<th>Total HP</th>
 			<th>Current HP</th>
@@ -166,6 +194,7 @@
 	</table>
 	<hr/>
 	<table>
+		<h2>Movement</h2>
 		<tr>
 			<th>Base Speed</th>
 			<th>Current Speed</th>
@@ -177,6 +206,7 @@
 	</table>
 	<hr/>
 	<table>
+		<h2>Money</h2>
 		<tr>
 			<th>Platinum</th>
 			<th>Gold</th>
@@ -191,12 +221,16 @@
 		</tr>
 	</table>
 	<hr/>
+	<h2>Equipment</h2>
 	<span id="table-equipment"></span>
 	<hr/>
+	<h2>Weapons</h2>
 	<span id="table-weapons"></span>
 	<hr/>
+	<h2>Items</h2>
 	<span id="table-items"></span>
 	<hr/>
+	<h2>Langauges</h2>
 	<span id="table-langauges"></span>
 </body>
 
@@ -228,13 +262,22 @@
 	p.wis = -1;
 	p.cha = -1;
 
-	// Movement
-	p.speed = -1;     // This is the current speed
-	p.speedBase = -1; // This is the base speed
+	// Combat
+	p.initiative = -1;
+	p.ac = -1;
+	p.acTouch = -1;
+	p.acFlat = -1;
+	p.bab = -1;
+	p.cmb = -1;
+	p.cmd = -1;
 
 	// Health
 	p.health = -1;     // This is the current health
 	p.healthBase = -1; // This is the base health
+
+	// Movement
+	p.speed = -1;     // This is the current speed
+	p.speedBase = -1; // This is the base speed
 
 	// Saves
 	p.fortitudeBase = -1;
@@ -337,9 +380,66 @@
 		];
 	}
 
+
+//////////////////////////////
+// Calculate various things //
+//////////////////////////////
+
+
+	// Calculate ability modifiers based on existing things
+	function calculateAbilityModifiers() {
+		getId('str-mod').innerHTML = calcAbilityMod(p.str);
+		getId('dex-mod').innerHTML = calcAbilityMod(p.dex);
+		getId('con-mod').innerHTML = calcAbilityMod(p.con);
+		getId('int-mod').innerHTML = calcAbilityMod(p.int);
+		getId('wis-mod').innerHTML = calcAbilityMod(p.wis);
+		getId('cha-mod').innerHTML = calcAbilityMod(p.cha);
+	}
+
+	// Split on spaces and then on underscores. Note that stats are in the format (stat1_+2 stat2_-50)
+	function calculateEquipmentModifiers() {
+		for (let i = 0; i < p.equipment.length; i++) { 
+  			let item = p.equipment[i];
+  			
+  			if(!item.equipped) {
+  				continue;
+  			}
+
+  			let stats = item.stats.split(' ');
+
+  			for(let j = 0; j < stats.length; j++) {
+  				let split = stats[j].split('_');
+  				let stat = split[0];
+  				let change = parseInt(split[1]);
+				
+  				p[stat] = p[stat] + change;
+  			}
+		}
+	}
+
+	function calculateHealth() {
+		p.health = p.healthBase;
+	}
+
+	function calculateSpeed() {
+		p.speed = p.speedBase;
+	}
+
+	function calculateSaves() {
+		p.fortitude = p.fortitudeBase + calcAbilityMod(p.con);
+		p.reflex = p.reflexBase + calcAbilityMod(p.dex);
+		p.will = p.willBase + calcAbilityMod(p.wis);
+	}
+
+	function calculateInitiative() {
+		p.initiative = calcAbilityMod(p.dex);
+	}
+	
+
 ////////////////////////////
 // Display various things //
 ////////////////////////////
+
 
 	function showGeneral() {
 		showById('name');
@@ -507,60 +607,16 @@
 		getId('will-mod').innerHTML = calcAbilityMod(p.wis);
 	}
 
-
-//////////////////////////////
-// Calculate various things //
-//////////////////////////////
-
-	// Calculate ability modifiers based on existing things
-	function calculateAbilityModifiers() {
-		getId('str-mod').innerHTML = calcAbilityMod(p.str);
-		getId('dex-mod').innerHTML = calcAbilityMod(p.dex);
-		getId('con-mod').innerHTML = calcAbilityMod(p.con);
-		getId('int-mod').innerHTML = calcAbilityMod(p.int);
-		getId('wis-mod').innerHTML = calcAbilityMod(p.wis);
-		getId('cha-mod').innerHTML = calcAbilityMod(p.cha);
+	function showInitiative() {
+		showById('initiative');
+		getId('initiative-mod').innerHTML = calcAbilityMod(p.dex);
+		getId('initiative-misc').innerHTML = 0;
 	}
-
-	// Split on spaces and then on underscores. Note that stats are in the format (stat1_+2 stat2_-50)
-	function calculateEquipmentModifiers() {
-		for (let i = 0; i < p.equipment.length; i++) { 
-  			let item = p.equipment[i];
-  			
-  			if(!item.equipped) {
-  				continue;
-  			}
-
-  			let stats = item.stats.split(' ');
-
-  			for(let j = 0; j < stats.length; j++) {
-  				let split = stats[j].split('_');
-  				let stat = split[0];
-  				let change = parseInt(split[1]);
-				
-  				p[stat] = p[stat] + change;
-  			}
-		}
-	}
-
-	function calculateHealth() {
-		p.health = p.healthBase;
-	}
-
-	function calculateSpeed() {
-		p.speed = p.speedBase;
-	}
-
-	function calculateSaves() {
-		p.fortitude = p.fortitudeBase + calcAbilityMod(p.con);
-		p.reflex = p.reflexBase + calcAbilityMod(p.dex);
-		p.will = p.willBase + calcAbilityMod(p.wis);
-	}
-
 
 ///////////////////////
 // Utility Functions //
 ///////////////////////
+
 
 	function calcAbilityMod(a) {
 		return Math.floor((a - 10) / 2);
@@ -596,6 +652,7 @@
 		calculateEquipmentModifiers();
 		calculateAbilityModifiers();
 		calculateSaves();
+		calculateInitiative();
 
 		showGeneral();
 		showEquipment();
@@ -603,6 +660,7 @@
 		showItems();
 		showLanguages();
 		showSaves();
+		showInitiative();
 	}
 
 	refreshAll();
