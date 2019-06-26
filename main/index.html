@@ -133,8 +133,8 @@
 			<th>Current HP</th>
 		</tr>
 		<tr>
+			<td><span id="healthBase">0</span></td>
 			<td><span id="health">0</span></td>
-			<td><span id="healthCurrent">0</span></td>
 		</tr>
 	</table>
 	<hr/>
@@ -144,8 +144,8 @@
 			<th>Current Speed</th>
 		</tr>
 		<tr>
+			<td><span id="speedBase">0</span></td>
 			<td><span id="speed">0</span></td>
-			<td><span id="speedCurrent">0</span></td>
 		</tr>		
 	</table>
 	<hr/>
@@ -198,14 +198,16 @@
 	p.wis = -1;
 	p.cha = -1;
 
-	p.speed = -1;
+	p.speed = -1;     // This is the current speed
+	p.speedBase = -1; // This is the base speed
 
-	p.health = -1;
-	p.healthCurrent = -1;
+	p.health = -1;     // This is the current health
+	p.healthBase = -1; // This is the base health
 
 	p.equipment = [];
 	p.weapons = [];
 	p.items = [];
+	p.languages = [];
 
 	function readGeneral() {
 		p.name = "Ozymandias";
@@ -233,11 +235,11 @@
 	} 
 
 	function readSpeed() {
-		p.speed = 30;
+		p.speedBase = 30;
 	}
 
 	function readHealth() {
-		p.health = 85;
+		p.healthBase = 85;
 	}
 
 	function readWeapons() {
@@ -263,44 +265,49 @@
 		];
 	}
 
+	function readLanguages() {
+		p.languages = [
+			{name:"Common"},
+			{name:"Undercommon"},
+			{name:"Dragonic"},
+			{name:"Brellish"},
+			{name:"Sylvan"},
+			{name:"Abyssal"},
+			{name:"Infernal"},
+		];
+	}
 
 ////////////////////////////
 // Display various things //
 ////////////////////////////
 
-
 	function showGeneral() {
-		getId('name').innerHTML = p.name;
-		getId('alignment').innerHTML = p.alignment;
-		getId('level').innerHTML = p.level;
-		getId('diety').innerHTML = p.diety;
-		getId('homeland').innerHTML = p.homeland;
-		getId('race').innerHTML = p.race;
-		getId('size').innerHTML = p.size;
-		getId('gender').innerHTML = p.gender;
-		getId('age').innerHTML = p.age;
-		getId('height').innerHTML = p.height;
-		getId('weight').innerHTML = p.weight;
-		getId('hair').innerHTML = p.hair;
-		getId('eyes').innerHTML = p.eyes;
-	}
+		showById('name');
+		showById('alignment');
+		showById('level');
+		showById('diety');
+		showById('homeland');
+		showById('race');
+		showById('size');
+		showById('gender');
+		showById('age');
+		showById('height');
+		showById('weight');
+		showById('hair');
+		showById('eyes');
 
-	function showAbilities() {
-		getId('str').innerHTML = p.str;
-		getId('dex').innerHTML = p.dex;
-		getId('con').innerHTML = p.con;
-		getId('int').innerHTML = p.int;
-		getId('wis').innerHTML = p.wis;
-		getId('cha').innerHTML = p.cha;
-	}
+		showById('str');
+		showById('dex');
+		showById('con');
+		showById('int');
+		showById('wis');
+		showById('cha');
 
-	function showSpeed() {
-		getId('speed').innerHTML = p.speed;
-	}
+		showById('speedBase');
+		showById('speed');
 
-	function showHealth() {
-		getId('health').innerHTML = p.health;
-		getId('healthCurrent').innerHTML = p.healthCurrent;
+		showById('healthBase');
+		showById('health');
 	}
 
 	function showEquipment() {
@@ -393,6 +400,8 @@
 		built += '</table>';
 		getId('table-items').innerHTML = built;
 	}
+
+
 //////////////////////////////
 // Calculate various things //
 //////////////////////////////
@@ -434,22 +443,27 @@
 	}
 
 	function calculateHealth() {
-		p.healthCurrent = p.health;
+		p.health = p.healthBase;
 	}
 
 	function calculateSpeed() {
-		p.speedCurrent = p.speed;
+		p.speed = p.speedBase;
 	}
+
+
 
 ///////////////////////
 // Utility Functions //
 ///////////////////////
 
 
-	function getId(id) {
+	function getId(id){
 		return document.getElementById(id);
 	}
 
+	function showById(id){
+		getId(id).innerHTML = p[id];
+	}
 
 
 //////////////////////
@@ -460,24 +474,21 @@
 	function refreshAll() {
 		readGeneral();
 		readAbilites();
-		readWeapons();
 		readEquipment();
+		readWeapons();
 		readItems();
 		readHealth();
 		readSpeed();
 
-		calculateEquipmentModifiers();
-		calculateAbilityModifiers();
 		calculateHealth();
 		calculateSpeed();
+		calculateEquipmentModifiers();
+		calculateAbilityModifiers();
 
 		showGeneral();
-		showAbilities();
 		showEquipment();
 		showWeapons();
 		showItems();
-		showHealth();
-		showSpeed();
 	}
 
 	refreshAll();
