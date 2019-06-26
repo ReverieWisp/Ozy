@@ -1,10 +1,40 @@
 <!DOCTYPE html>
 <html>
+
+
+
 <head>
 	<title>Ozy</title>
 </head>
+
+
+
+<style type="text/css">
+	table, th, td {
+		text-align: left;
+		border: 1px solid rgba(30,20,25,.15);
+	}
+
+	th {
+		padding-right: 5px;
+		font-size: 1.2em;
+		background-color: rgba(30,20,25,.15);
+	}
+
+	td {
+		padding-right: 5px;
+		font-size: 1em
+	}
+</style>
+
+
+
 <body>
 	<table>
+		<tr>
+			<th>Fields</th>
+			<th>Info</th>
+		</tr>
 		<tr>
 			<td><strong>Name</strong></td>
 			<td><span id="name"></span></td>
@@ -97,8 +127,30 @@
 		</tr>
 	</table>
 	<hr/>
+	<table>
+		<tr>
+			<th>Platinum</th>
+			<th>Gold</th>
+			<th>Silver</th>
+			<th>Copper</th>
+		</tr>
+		<tr>
+			<td><span id="platinum">0</span></td>
+			<td><span id="gold">0</span></td>
+			<td><span id="silver">0</span></td>
+			<td><span id="copper">0</span></td>
+		</tr>
+	</table>
+	<hr/>
 	<span id="table-equipment"></span>
+	<hr/>
+	<span id="table-weapons"></span>
+	<hr/>
+	<span id="table-items"></span>
+	<hr/>
 </body>
+
+
 
 <script type="text/javascript">
 	p = {};
@@ -110,10 +162,10 @@
 	p.homeland = "-";
 	p.race = "-";
 	p.size = "-";
-	p.gender = "-";
+	p.gender = "-";  
 	p.age = -1;      // In years
 	p.height = -1;   // In inches
-	p.weight = -1;   // in pounds
+	p.weight = -1;   // In pounds
 	p.hair = "-";
 	p.eyes = "-";
 
@@ -129,10 +181,7 @@
 
 	p.equipment = [];
 	p.weapons = [];
-
-	function getId(id) {
-		return document.getElementById(id);
-	}
+	p.items = [];
 
 	function readGeneral() {
 		p.name = "Ozymandias";
@@ -161,20 +210,32 @@
 
 	function readWeapons() {
 		p.weapons = [
-			{name:"Ghostly Scimitar", modifier:"+2", effects:"ghost touch", notes:"bab+dex+1, critical 18-20 (2x)", damage:"1d6+"},
+			{name:"+2 Ghostly Scimitar", stats:"damage_+2", type:"scimitar", weight: "5", effects:"ghost touch", damage:"1d6", notes:"bab+dex+1, critical 18-20 (2x)"},
 		];
 	}
 
 	function readEquipment() {
 		p.equipment = [
-			{name:"Chainshirt", stats:"ac_+5 stealth_-1", type:"shirt", weight:"20", equipped:true},
-			{name:"Ring of Protection", stats:"ac_+1", type:"ring", weight:"0", equipped:true},
-			{name:"Boots of Stridening", stats:"speed_+10", type:"boots", weight:"1", equipped:true},
-			{name:"Stealth Cloak", stats:"stealth_+1", type:"cloak", weight:"3", equipped:true},
-			{name:"Stylish Headband", stats:"cha_+2", type:"shirt", weight:"0", equipped:true},
-			{name:"Amulet of Natural Armor", stats:"ac_+1", type:"amulet", weight:"0", equipped:true},
+			{name:"Chainshirt", stats:"ac_+5 stealth_-1", type:"shirt", weight:"20", equipped:true, value:100},
+			{name:"Ring of Protection", stats:"ac_+1", type:"ring", weight:"0", equipped:true, value:100},
+			{name:"Boots of Stridening", stats:"speed_+10", type:"boots", weight:"1", equipped:true, value:100},
+			{name:"Stealth Cloak", stats:"stealth_+1", type:"cloak", weight:"3", equipped:true, value:100},
+			{name:"Stylish Headband", stats:"cha_+2", type:"shirt", weight:"0", equipped:true, value:100},
+			{name:"Amulet of Natural Armor", stats:"ac_+1", type:"amulet", weight:"0", equipped:true, value:100},
 		];
 	}
+
+	function readItems() {
+		p.items = [
+			{name:"Commoner clothes", weight: "2", value:"1", notes:"A couple beige and generic looking clothes. Clean, but they don't stand out."},
+		];
+	}
+
+
+////////////////////////////
+// Display various things //
+////////////////////////////
+
 
 	function showGeneral() {
 		getId('name').innerHTML = p.name;
@@ -211,6 +272,7 @@
 				<th>Type</th>
 				<th>Weight</th>
 				<th>Equipped</th>
+				<th>Value (gp)</th>
 			</tr>`;
 
 		for(let i = 0; i < p.equipment.length; i++) {
@@ -223,11 +285,77 @@
 					<td>${item.type}</td>
 					<td>${item.weight}</td>
 					<td>${item.equipped}</td>
+					<td>${item.value}</td>
 				</tr>`;
 		}
+
 		built += '</table>';
 		getId('table-equipment').innerHTML = built;
 	}
+
+ 	function showWeapons() {
+		let built = "";
+		built += '<table>';
+		built += `
+			<tr>
+				<th>Name</th>
+				<th>Stats</th>
+				<th>Type</th>
+				<th>Weight</th>
+				<th>Effects</th>
+				<th>Damage</th>
+				<th>Notes</th>
+			</tr>`;
+
+		for(let i = 0; i < p.weapons.length; i++) {
+			let item = p.weapons[i];
+
+			built += `
+				<tr>
+					<td>${item.name}</td>
+					<td>${item.stats.split(' ').join(', ').split('_').join(' ')}</td>
+					<td>${item.type}</td>
+					<td>${item.weight}</td>
+					<td>${item.effects}</td>
+					<td>${item.damage}</td>
+					<td>${item.notes}</td>
+				</tr>`;
+		}
+
+		built += '</table>';
+		getId('table-weapons').innerHTML = built;
+	}
+
+	function showItems() {
+			let built = "";
+		built += '<table>';
+		built += `
+			<tr>
+				<th>Name</th>
+				<th>Weight</th>
+				<th>Value (gp)</th>
+				<th>Notes</th>
+			</tr>`;
+
+		for(let i = 0; i < p.items.length; i++) {
+			let item = p.items[i];
+
+			built += `
+				<tr>
+					<td>${item.name}</td>
+					<td>${item.weight}</td>
+					<td>${item.value}</td>
+					<td>${item.notes}</td>
+				</tr>`;
+		}
+
+		built += '</table>';
+		getId('table-items').innerHTML = built;
+	}
+//////////////////////////////
+// Calculate various things //
+//////////////////////////////
+
 
 	function calculateAbilityModifiers() {
 		function calc_am(a) {
@@ -247,6 +375,11 @@
 
 		for (let i = 0; i < p.equipment.length; i++) { 
   			let item = p.equipment[i];
+  			
+  			if(!item.equipped) {
+  				continue;
+  			}
+
   			let stats = item.stats.split(' ');
 
   			for(let j = 0; j < stats.length; j++) {
@@ -259,11 +392,29 @@
 		}
 	}
 
+
+///////////////////////
+// Utility Functions //
+///////////////////////
+
+
+	function getId(id) {
+		return document.getElementById(id);
+	}
+
+
+
+//////////////////////
+// Run Applications //
+//////////////////////
+
+
 	function refreshAll() {
 		readGeneral();
 		readAbilites();
 		readWeapons();
 		readEquipment();
+		readItems();
 
 		calculateEquipmentModifiers();
 		calculateAbilityModifiers();
@@ -271,6 +422,8 @@
 		showGeneral();
 		showAbilities();
 		showEquipment();
+		showWeapons();
+		showItems();
 	}
 
 	refreshAll();
