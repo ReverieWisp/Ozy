@@ -4,7 +4,7 @@
 
 
 <head>
-	<title>Ozy</title>
+	<title>Ozymandias</title>
 </head>
 
 
@@ -129,6 +129,28 @@
 	<hr/>
 	<table>
 		<tr>
+			<th>Total HP</th>
+			<th>Current HP</th>
+		</tr>
+		<tr>
+			<td><span id="health">0</span></td>
+			<td><span id="healthCurrent">0</span></td>
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<tr>
+			<th>Base Speed</th>
+			<th>Current Speed</th>
+		</tr>
+		<tr>
+			<td><span id="speed">0</span></td>
+			<td><span id="speedCurrent">0</span></td>
+		</tr>		
+	</table>
+	<hr/>
+	<table>
+		<tr>
 			<th>Platinum</th>
 			<th>Gold</th>
 			<th>Silver</th>
@@ -177,7 +199,9 @@
 	p.cha = -1;
 
 	p.speed = -1;
-	p.hp = -1;
+
+	p.health = -1;
+	p.healthCurrent = -1;
 
 	p.equipment = [];
 	p.weapons = [];
@@ -207,6 +231,14 @@
 		p.wis = 10
 		p.cha = 26;
 	} 
+
+	function readSpeed() {
+		p.speed = 30;
+	}
+
+	function readHealth() {
+		p.health = 85;
+	}
 
 	function readWeapons() {
 		p.weapons = [
@@ -260,6 +292,15 @@
 		getId('int').innerHTML = p.int;
 		getId('wis').innerHTML = p.wis;
 		getId('cha').innerHTML = p.cha;
+	}
+
+	function showSpeed() {
+		getId('speed').innerHTML = p.speed;
+	}
+
+	function showHealth() {
+		getId('health').innerHTML = p.health;
+		getId('healthCurrent').innerHTML = p.healthCurrent;
 	}
 
 	function showEquipment() {
@@ -392,6 +433,13 @@
 		}
 	}
 
+	function calculateHealth() {
+		p.healthCurrent = p.health;
+	}
+
+	function calculateSpeed() {
+		p.speedCurrent = p.speed;
+	}
 
 ///////////////////////
 // Utility Functions //
@@ -415,15 +463,21 @@
 		readWeapons();
 		readEquipment();
 		readItems();
+		readHealth();
+		readSpeed();
 
 		calculateEquipmentModifiers();
 		calculateAbilityModifiers();
+		calculateHealth();
+		calculateSpeed();
 
 		showGeneral();
 		showAbilities();
 		showEquipment();
 		showWeapons();
 		showItems();
+		showHealth();
+		showSpeed();
 	}
 
 	refreshAll();
