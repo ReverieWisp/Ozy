@@ -129,6 +129,33 @@
 	<hr/>
 	<table>
 		<tr>
+			<th>Save</th>
+			<th>Total</th>
+			<th>Base</th>
+			<th>Modifier</th>
+		</tr>
+		<tr>
+			<td><strong>Fortitude (con)</strong></td>
+			<td><span id="fortitude">0</span></td>
+			<td><span id="fortitudeBase">0</span></td>
+			<td><span id="fortitude-mod">0</span></td>
+		</tr>
+		<tr>
+			<td><strong>Reflex (dex)</strong></td>
+			<td><span id="reflex">0</span></td>
+			<td><span id="reflexBase">0</span></td>
+			<td><span id="reflex-mod">0</span></td>
+		</tr>
+		<tr>
+			<td><strong>Will (wis)</strong></td>
+			<td><span id="will">0</span></td>
+			<td><span id="willBase">0</span></td>
+			<td><span id="will-mod">0</span></td>
+		</tr>
+	</table>
+	<hr/>
+	<table>
+		<tr>
 			<th>Total HP</th>
 			<th>Current HP</th>
 		</tr>
@@ -178,6 +205,7 @@
 <script type="text/javascript">
 	p = {};
 	
+	// General
 	p.name = "-";
 	p.alignment = "-";
 	p.level = -1;
@@ -192,6 +220,7 @@
 	p.hair = "-";
 	p.eyes = "-";
 
+	// Abilities
 	p.str = -1;
 	p.dex = -1;
 	p.con = -1;
@@ -199,12 +228,29 @@
 	p.wis = -1;
 	p.cha = -1;
 
+	// Movement
 	p.speed = -1;     // This is the current speed
 	p.speedBase = -1; // This is the base speed
 
+	// Health
 	p.health = -1;     // This is the current health
 	p.healthBase = -1; // This is the base health
 
+	// Saves
+	p.fortitudeBase = -1;
+	p.fortitude = -1;
+	p.reflexBase = -1;
+	p.reflex = -1;
+	p.willBase = -1;
+	p.will = -1;
+
+	// Money
+	p.platinum = -1;
+	p.gold = -1;
+	p.silver = -1;
+	p.copper = -1;
+
+	// Collections of things
 	p.equipment = [];
 	p.weapons = [];
 	p.items = [];
@@ -243,20 +289,33 @@
 		p.healthBase = 85;
 	}
 
+	function readSaves() {
+		p.fortitudeBase = 3;
+		p.reflexBase = 7;
+		p.willBase = 7;
+	}
+
+	function readMoney() {
+		p.platinum = 1;
+		p.gold = 2;
+		p.silver = 3;
+		p.copper = 4;
+	}
+
 	function readWeapons() {
 		p.weapons = [
-			{name:"+2 Ghostly Scimitar", stats:"damage_+2", type:"scimitar", weight: "5", effects:"ghost touch", damage:"1d6", notes:"bab+dex+1, critical 18-20 (2x)"},
+			{name:"+2 Ghostly Scimitar", stats:"damage_+2", type:"scimitar", weight: "5", effects:"ghost touch", damage:"1d6", notes:"bab+dex+1, critical 18-20 (2x)", value:100},
 		];
 	}
 
 	function readEquipment() {
 		p.equipment = [
-			{name:"Chainshirt", stats:"ac_+5 stealth_-1", type:"shirt", weight:"20", equipped:true, value:100},
-			{name:"Ring of Protection", stats:"ac_+1", type:"ring", weight:"0", equipped:true, value:100},
-			{name:"Boots of Stridening", stats:"speed_+10", type:"boots", weight:"1", equipped:true, value:100},
-			{name:"Stealth Cloak", stats:"stealth_+1", type:"cloak", weight:"3", equipped:true, value:100},
-			{name:"Stylish Headband", stats:"cha_+2", type:"shirt", weight:"0", equipped:true, value:100},
-			{name:"Amulet of Natural Armor", stats:"ac_+1", type:"amulet", weight:"0", equipped:true, value:100},
+			{name:"Chainshirt", stats:"ac_+5 stealth_-1", type:"shirt", weight:"20", equipped:true, value:100, notes:""},
+			{name:"Ring of Protection", stats:"ac_+1", type:"ring", weight:"0", equipped:true, value:100, notes:""},
+			{name:"Boots of Stridening", stats:"speed_+10", type:"boots", weight:"1", equipped:true, value:100, notes:""},
+			{name:"Stealth Cloak", stats:"stealth_+1", type:"cloak", weight:"3", equipped:true, value:100, notes:""},
+			{name:"Stylish Headband", stats:"cha_+2", type:"shirt", weight:"0", equipped:true, value:100, notes:""},
+			{name:"Amulet of Natural Armor", stats:"ac_+1", type:"amulet", weight:"0", equipped:true, value:100, notes:""},
 		];
 	}
 
@@ -309,6 +368,11 @@
 
 		showById('healthBase');
 		showById('health');
+
+		showById('platinum');
+		showById('gold');
+		showById('silver');
+		showById('copper');
 	}
 
 	function showEquipment() {
@@ -322,6 +386,7 @@
 				<th>Weight</th>
 				<th>Equipped</th>
 				<th>Value (gp)</th>
+				<th>Notes</th>
 			</tr>`;
 
 		for(let i = 0; i < p.equipment.length; i++) {
@@ -335,6 +400,7 @@
 					<td>${item.weight}</td>
 					<td>${item.equipped}</td>
 					<td>${item.value}</td>
+					<td>${item.notes}</td>
 				</tr>`;
 		}
 
@@ -353,6 +419,7 @@
 				<th>Weight</th>
 				<th>Effects</th>
 				<th>Damage</th>
+				<th>Value (gp)</th>
 				<th>Notes</th>
 			</tr>`;
 
@@ -367,6 +434,7 @@
 					<td>${item.weight}</td>
 					<td>${item.effects}</td>
 					<td>${item.damage}</td>
+					<td>${item.value}</td>
 					<td>${item.notes}</td>
 				</tr>`;
 		}
@@ -376,7 +444,7 @@
 	}
 
 	function showItems() {
-			let built = "";
+		let built = "";
 		built += '<table>';
 		built += `
 			<tr>
@@ -403,7 +471,7 @@
 	}
 
 	function showLanguages() {
-			let built = "";
+		let built = "";
 		built += '<table>';
 		built += `
 			<tr>
@@ -425,28 +493,37 @@
 		getId('table-langauges').innerHTML = built;
 	}
 
+	function showSaves() {
+		showById('fortitude');
+		showById('fortitudeBase');
+		getId('fortitude-mod').innerHTML = calcAbilityMod(p.con);
+
+		showById('reflex');
+		showById('reflexBase');
+		getId('reflex-mod').innerHTML = calcAbilityMod(p.dex);
+
+		showById('will');
+		showById('willBase');
+		getId('will-mod').innerHTML = calcAbilityMod(p.wis);
+	}
+
 
 //////////////////////////////
 // Calculate various things //
 //////////////////////////////
 
-
+	// Calculate ability modifiers based on existing things
 	function calculateAbilityModifiers() {
-		function calc_am(a) {
-			return Math.floor((a - 10) / 2);
-		}
-
-		getId('str-mod').innerHTML = calc_am(p.str);
-		getId('dex-mod').innerHTML = calc_am(p.dex);
-		getId('con-mod').innerHTML = calc_am(p.con);
-		getId('int-mod').innerHTML = calc_am(p.int);
-		getId('wis-mod').innerHTML = calc_am(p.wis);
-		getId('cha-mod').innerHTML = calc_am(p.cha);
+		getId('str-mod').innerHTML = calcAbilityMod(p.str);
+		getId('dex-mod').innerHTML = calcAbilityMod(p.dex);
+		getId('con-mod').innerHTML = calcAbilityMod(p.con);
+		getId('int-mod').innerHTML = calcAbilityMod(p.int);
+		getId('wis-mod').innerHTML = calcAbilityMod(p.wis);
+		getId('cha-mod').innerHTML = calcAbilityMod(p.cha);
 	}
 
 	// Split on spaces and then on underscores. Note that stats are in the format (stat1_+2 stat2_-50)
 	function calculateEquipmentModifiers() {
-
 		for (let i = 0; i < p.equipment.length; i++) { 
   			let item = p.equipment[i];
   			
@@ -474,12 +551,20 @@
 		p.speed = p.speedBase;
 	}
 
+	function calculateSaves() {
+		p.fortitude = p.fortitudeBase + calcAbilityMod(p.con);
+		p.reflex = p.reflexBase + calcAbilityMod(p.dex);
+		p.will = p.willBase + calcAbilityMod(p.wis);
+	}
 
 
 ///////////////////////
 // Utility Functions //
 ///////////////////////
 
+	function calcAbilityMod(a) {
+		return Math.floor((a - 10) / 2);
+	}
 
 	function getId(id){
 		return document.getElementById(id);
@@ -494,7 +579,6 @@
 // Run Applications //
 //////////////////////
 
-
 	function refreshAll() {
 		readGeneral();
 		readAbilites();
@@ -503,18 +587,22 @@
 		readItems();
 		readHealth();
 		readSpeed();
+		readSaves();
 		readLanguages();
+		readMoney();
 
 		calculateHealth();
 		calculateSpeed();
 		calculateEquipmentModifiers();
 		calculateAbilityModifiers();
+		calculateSaves();
 
 		showGeneral();
 		showEquipment();
 		showWeapons();
 		showItems();
 		showLanguages();
+		showSaves();
 	}
 
 	refreshAll();
