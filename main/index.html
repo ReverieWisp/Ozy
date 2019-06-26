@@ -170,6 +170,7 @@
 	<hr/>
 	<span id="table-items"></span>
 	<hr/>
+	<span id="table-langauges"></span>
 </body>
 
 
@@ -267,13 +268,13 @@
 
 	function readLanguages() {
 		p.languages = [
-			{name:"Common"},
-			{name:"Undercommon"},
-			{name:"Dragonic"},
-			{name:"Brellish"},
-			{name:"Sylvan"},
-			{name:"Abyssal"},
-			{name:"Infernal"},
+			{name:"Common", notes:"General language"},
+			{name:"Undercommon", notes:"Lower-class language"},
+			{name:"Brellish", notes:""},
+			{name:"Sylvan", notes:""},
+			{name:"Dragonic", notes:"Language of Dragons"},
+			{name:"Abyssal", notes:"Language of Demons"},
+			{name:"Infernal", notes:"Laguage of Devils"},
 		];
 	}
 
@@ -401,6 +402,29 @@
 		getId('table-items').innerHTML = built;
 	}
 
+	function showLanguages() {
+			let built = "";
+		built += '<table>';
+		built += `
+			<tr>
+				<th>Language</th>
+				<th>Notes</th>
+			</tr>`;
+
+		for(let i = 0; i < p.languages.length; i++) {
+			let language = p.languages[i];
+
+			built += `
+				<tr>
+					<td>${language.name}</td>
+					<td>${language.notes}</td>
+				</tr>`;
+		}
+
+		built += '</table>';
+		getId('table-langauges').innerHTML = built;
+	}
+
 
 //////////////////////////////
 // Calculate various things //
@@ -479,6 +503,7 @@
 		readItems();
 		readHealth();
 		readSpeed();
+		readLanguages();
 
 		calculateHealth();
 		calculateSpeed();
@@ -489,6 +514,7 @@
 		showEquipment();
 		showWeapons();
 		showItems();
+		showLanguages();
 	}
 
 	refreshAll();
