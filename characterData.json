@@ -1,0 +1,82 @@
+{
+	"generalInfo":{
+		"name":"Ozymandias",
+		"player":"RW",
+		"exp":"Arthur says so",
+		"ancestry":"Tiefling",
+		"background":"that blue color you get at school picture day",
+		"class":"bard",
+		"size":"M",
+		"alignment":"True Neutral",
+		"traits":"Spicy. Tail.",
+		"diety":"Orb"
+	},
+	"generalMumbers":{
+		"level":2,
+		"heroPoints":0
+	},
+	"abilityScores":{
+		"str":10,
+		"dex":10,
+		"con":10,
+		"int":10,
+		"wis":10,
+		"cha":10
+	},
+	"armorClass":{
+		"current":10
+	},
+	"health":{
+		"max":100,
+		"current":20,
+		"temporary":0,
+		"dying":false,
+		"wounded":false,
+		"resistancesAndImunities":[
+		],
+		"conditions":[
+		]
+	},
+	"savingThrows":{
+		"fortitude":1,
+		"reflex":1,
+		"will":1,
+		"notes":"There are no notes at this time"
+	},
+	"classDC":{
+		"current":2
+	},
+	"speed":{
+		"current":30,
+		"movementTypesAndNodes":"There are no notes at this time"
+	},
+	"perception":{
+		"current":2,
+		"senses":[
+		]
+	},
+	"skills":{
+		"acrobatics":{ "current":0, "prof":0 },
+		"arcana":{ "current":0, "prof":0 },
+		"athletics":{ "current":0, "prof":0 },
+		"crafting":{ "current":0, "prof":0 },
+		"deception":{ "current":0, "prof":0 },
+		"diplomacy":{ "current":0, "prof":0 },
+		"intimidation":{ "current":0, "prof":0 },
+		"lore1":{ "current":0, "prof":0 },
+		"lore2":{ "current":0, "prof":0 },
+		"medicine":{ "current":0, "prof":0 },
+		"nature":{ "current":0, "prof":0 },
+		"occultism":{ "current":0, "prof":0 },
+		"performance":{ "current":0, "prof":0 },
+		"religion":{ "current":0, "prof":0 },
+		"society":{ "current":0, "prof":0 },
+		"stealth":{ "current":0, "prof":0 },
+		"survival":{ "current":0, "prof":0 },
+		"thievery":{ "current":0, "prof":0 }
+	},
+	"languages":{
+		"spoken":[
+		]
+	}
+}
